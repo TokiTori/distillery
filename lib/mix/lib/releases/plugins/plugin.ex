@@ -166,8 +166,10 @@ defmodule Mix.Releases.Plugin do
 
   @spec call(atom(), Release.t()) :: {:ok, term} | {:error, {:plugin, term}}
   defp call(callback, release) do
+    IO.puts "all plugins: #{inspect release.profile.plugins}"
     plugins =
       for p <- release.profile.plugins do
+        IO.puts "callback #{inspect callback} for plugin #{inspect p}"
         case p do
           {_p, _opts} ->
             p
@@ -210,8 +212,10 @@ defmodule Mix.Releases.Plugin do
   # TODO: remove once the /1 plugins are deprecated
   defp apply_plugin(plugin, callback, release, opts) do
     if function_exported?(plugin, callback, 2) do
+      IO.puts "invoke #{inspect callback}/2"
       apply(plugin, callback, [release, opts])
     else
+      IO.puts "invoke #{inspect callback}/1"
       apply(plugin, callback, [release])
     end
   end
